@@ -1,12 +1,13 @@
 from django.db import models
 from users.models import CustomUser
+from models import Channel
 
 # Create your models here.
 class Message(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    source = models.IntegerField()
+    source = models.ForeignKey(Channel , on_delete=models.CASCADE)
     reactions = models.ManyToManyField(CustomUser, related_name='reactions_to_messages')
     
     def __str__(self):
@@ -17,7 +18,7 @@ class Thread(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
-    source = models.IntegerField()
+    source = models.ForeignKey(Message , on_delete=models.CASCADE)
     reactions = models.ManyToManyField(CustomUser, related_name='reactions_to_messages')
     
     def __str__(self):
