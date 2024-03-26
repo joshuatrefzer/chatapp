@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Channel, Message
-from .serializers import ChannelSerializer, MessageSerializer
+from .serializers import ChannelSerializer, MessageSerializer, ThreadSerializer
 from rest_framework.views import APIView
 
 
@@ -11,14 +11,11 @@ class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
     
 
-    
-    
 class ChannelViewSet(viewsets.ModelViewSet):
     queryset = Channel.objects.all()
     serializer_class = ChannelSerializer
     
     
-
 class ThreadViewset(viewsets.ModelViewSet):
-    queryset = Message.objects.filter(is_thread = True)
-    serializer_class = MessageSerializer
+    queryset = Message.objects.all()
+    serializer_class = ThreadSerializer

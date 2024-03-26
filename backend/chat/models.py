@@ -1,32 +1,8 @@
 from django.db import models
 from users.models import CustomUser
-from models import Channel
+
 
 # Create your models here.
-class Message(models.Model):
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    source = models.ForeignKey(Channel , on_delete=models.CASCADE)
-    reactions = models.ManyToManyField(CustomUser, related_name='reactions_to_messages')
-    
-    def __str__(self):
-        return f"Message from {self.author} at {self.created_at}"
-    
-    
-class Thread(models.Model):
-    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    source = models.ForeignKey(Message , on_delete=models.CASCADE)
-    reactions = models.ManyToManyField(CustomUser, related_name='reactions_to_messages')
-    
-    def __str__(self):
-        return f"Message from {self.author} at {self.created_at}"
-    
-    
-    
-    
 class Channel(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
@@ -37,3 +13,31 @@ class Channel(models.Model):
     
     def __str__(self):
         return self.name
+    
+    
+class Message(models.Model):
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    source = models.ForeignKey(Channel , on_delete=models.CASCADE)
+    reactions = models.ManyToManyField(CustomUser, related_name='message_reactions')
+    
+    def __str__(self):
+        return f"Message from {self.author} at {self.created_at}"
+    
+    
+class Thread(models.Model):
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    source = models.ForeignKey(Message , on_delete=models.CASCADE)
+    reactions = models.ManyToManyField(CustomUser, related_name='thread_reactions')
+    
+    def __str__(self):
+        return f"Message from {self.author} at {self.created_at}"
+    
+        
+    
+
+    
+    
