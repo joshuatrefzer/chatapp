@@ -92,15 +92,26 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "chatapp",
-        "USER": "elijahjosh",
-        "PASSWORD": "elijahjoshua",
-        "HOST": "localhost",
-        "PORT": "5433",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chatdb',
+        'USER': 'joshua',
+        'PASSWORD': 'mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "chatapp",
+#         "USER": "elijahjosh",
+#         "PASSWORD": "elijahjoshua",
+#         "HOST": "localhost",
+#         "PORT": "5433",
+#     }
+# }
 
 
 
