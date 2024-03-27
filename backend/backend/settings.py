@@ -17,7 +17,7 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CLIENT_BASE_URL = "http://localhost:4200"
-BACKEND_BASE_URL = "http://localhost:8000"
+BACKEND_BASE_URL = "212.132.106.211"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
