@@ -21,18 +21,24 @@ from django.conf.urls.static import static
 from django.conf import settings
 from rest_framework.routers import DefaultRouter
 
-from chat.views import ChannelViewSet, MessageViewSet
+from chat.views import ChannelViewSet, MessageViewSet, ThreadViewset, MessagesFromChannel, ThreadsFromChannel, ChannelsForUser
+from users.views import CustomUserViewSet
 from users.views import login, signup, logout
 
 router = DefaultRouter()
 router.register(r'messages', MessageViewSet)
 router.register(r'channels', ChannelViewSet)
+router.register(r'threads', ThreadViewset)
+router.register(r'users', CustomUserViewSet)
 
 
 urlpatterns = [
     re_path('login', login),
     re_path('logout', logout),
     re_path('signup', signup),
+    path('messages-from-channel/<int:channel_id>/', MessagesFromChannel.as_view(), name='messages_from_channel'),
+    path('threads-from-messages/<int:message_id>/', ThreadsFromChannel.as_view(), name='threads_from_channel'),
+    path('channels-for-user/<int:user_id>/', ChannelsForUser.as_view(), name='channels_for_user' ),
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
 ]  + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

@@ -6,3 +6,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ['id', 'username', 'email', 'picture', 'is_online', 'password']  # Füge hier weitere erforderliche Felder hinzu
         extra_kwargs = {'password': {'write_only': True}}  # Das Passwort sollte nur zum Schreiben verwendet werden
+        

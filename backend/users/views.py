@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from rest_framework import viewsets
 from rest_framework.decorators import api_view
 from django.contrib.auth import get_user_model
 from rest_framework import  status
@@ -51,3 +51,16 @@ def logout(request):
             return Response({"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"detail": "Token not provided."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class CustomUserViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+
+    def list(self, request, *args, **kwargs):
+        if request.method != 'GET':
+            return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        return super().list(request, *args, **kwargs)
+    
+    def destroy(self, request, *args, **kwargs):
+        return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)

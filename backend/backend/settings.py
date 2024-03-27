@@ -98,10 +98,10 @@ DATABASES = {
         "USER": "elijahjosh",
         "PASSWORD": "elijahjoshua",
         "HOST": "localhost",
-        # "PORT": "5432",
         "PORT": "5433",
     }
 }
+
 
 
 # Password validation
