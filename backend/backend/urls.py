@@ -33,12 +33,12 @@ router.register(r'users', CustomUserViewSet)
 
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('', include(router.urls)),
     re_path('login', login),
     re_path('logout', logout),
     re_path('signup', signup),
     path('messages-from-channel/<int:channel_id>/', MessagesFromChannel.as_view(), name='messages_from_channel'),
     path('threads-from-messages/<int:message_id>/', ThreadsFromChannel.as_view(), name='threads_from_channel'),
     path('channels-for-user/<int:user_id>/', ChannelsForUser.as_view(), name='channels_for_user' ),
-    path('admin/', admin.site.urls),
-    path('', include(router.urls)),
 ]  + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
