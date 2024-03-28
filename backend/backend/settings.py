@@ -28,7 +28,7 @@ SECRET_KEY = "django-insecure-t%jd)ypb%*1-8e=f%@ype0_*5!9x#odp!i=ns3aoiu-63iing%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [CLIENT_BASE_URL ,BACKEND_BASE_URL, 'localhost' , '212.132.106.211']
+ALLOWED_HOSTS = [CLIENT_BASE_URL ,BACKEND_BASE_URL, 'localhost' , 'joshuatrefzer-backend.com']
 
 CORS_ALLOWED_ORIGINS = [BACKEND_BASE_URL, CLIENT_BASE_URL]
 
