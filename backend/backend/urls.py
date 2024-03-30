@@ -42,4 +42,4 @@ urlpatterns = [
     path('upload_img/<int:user_id>/', upload_profile_image, name='upload_profile_image'),
     path('threads-from-messages/<int:message_id>/', ThreadsFromChannel.as_view(), name='threads_from_channel'),
     path('channels-for-user/<int:user_id>/', ChannelsForUser.as_view(), name='channels_for_user' ),
-]  + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+]  + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) 
