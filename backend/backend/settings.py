@@ -18,6 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 CLIENT_BASE_URL = "http://localhost:4200"
 BACKEND_BASE_URL = "http://localhost:8000"
+SERVER_BASE_URL = BACKEND_BASE_URL # https://joshuatrfezer-backend.com
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -28,7 +29,7 @@ SECRET_KEY = "django-insecure-t%jd)ypb%*1-8e=f%@ype0_*5!9x#odp!i=ns3aoiu-63iing%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [CLIENT_BASE_URL ,BACKEND_BASE_URL, 'localhost' , 'joshuatrefzer-backend.com']
+ALLOWED_HOSTS = [CLIENT_BASE_URL ,BACKEND_BASE_URL, 'localhost' , 'joshuatrefzer-backend.com', '127.0.0.1']
 
 CORS_ALLOWED_ORIGINS = [BACKEND_BASE_URL, CLIENT_BASE_URL]
 
@@ -91,27 +92,27 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'chatdb',
-        'USER': 'joshua',
-        'PASSWORD': 'mysql',
-        'HOST': 'localhost',
-        'PORT': '3306',
-    }
-}
-
 # DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": "chatapp",
-#         "USER": "elijahjosh",
-#         "PASSWORD": "elijahjoshua",
-#         "HOST": "localhost",
-#         "PORT": "5433",
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'chatdb',
+#         'USER': 'joshua',
+#         'PASSWORD': 'mysql',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
 #     }
 # }
+
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "chatapp",
+        "USER": "elijahjosh",
+        "PASSWORD": "elijahjoshua",
+        "HOST": "localhost",
+        "PORT": "5433",
+    }
+}
 
 
 

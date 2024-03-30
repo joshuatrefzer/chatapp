@@ -23,7 +23,7 @@ from rest_framework.routers import DefaultRouter
 
 from chat.views import ChannelViewSet, MessageViewSet, ThreadViewset, MessagesFromChannel, ThreadsFromChannel, ChannelsForUser
 from users.views import CustomUserViewSet
-from users.views import login, signup, logout
+from users.views import login, signup, logout, upload_profile_image
 
 router = DefaultRouter()
 router.register(r'messages', MessageViewSet)
@@ -39,6 +39,7 @@ urlpatterns = [
     re_path('logout', logout),
     re_path('signup', signup),
     path('messages-from-channel/<int:channel_id>/', MessagesFromChannel.as_view(), name='messages_from_channel'),
+    path('upload_img/<int:user_id>/', upload_profile_image, name='upload_profile_image'),
     path('threads-from-messages/<int:message_id>/', ThreadsFromChannel.as_view(), name='threads_from_channel'),
     path('channels-for-user/<int:user_id>/', ChannelsForUser.as_view(), name='channels_for_user' ),
 ]  + staticfiles_urlpatterns() + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

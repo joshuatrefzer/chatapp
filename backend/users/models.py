@@ -3,7 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 class CustomUser(AbstractUser):
-    picture = models.FileField(_("Profile Picture"), upload_to='profile_pictures/', max_length=100, blank=True, null=True)
+    picture = models.FileField(_("Profile Picture"), upload_to='profile_pictures/',  blank=True, null=True)
     is_online = models.BooleanField(_("Is Online"), default=False)
 
     def __str__(self):

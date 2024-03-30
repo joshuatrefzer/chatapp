@@ -1,4 +1,6 @@
+from django.conf import settings
 from django.db import models
+
 from users.models import CustomUser
 
 
@@ -13,6 +15,8 @@ class Channel(models.Model):
     
     def __str__(self):
         return self.name
+    
+
     
     
 class Message(models.Model):

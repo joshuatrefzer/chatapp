@@ -21,7 +21,7 @@ class ChannelViewSet(viewsets.ModelViewSet):
     
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
-    
+ 
     
 class ThreadViewset(viewsets.ModelViewSet):
     queryset = Thread.objects.all()

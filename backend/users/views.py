@@ -36,6 +36,7 @@ def signup(request):
         return Response({"token": token.key, "user": serializer.data}, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 
 @api_view(['POST'])
 def logout(request):
@@ -51,6 +52,27 @@ def logout(request):
             return Response({"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"detail": "Token not provided."}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+@api_view(['POST'])
+def upload_profile_image(request, user_id):
+    try:
+        user = CustomUser.objects.get(pk=user_id)
+    except CustomUser.DoesNotExist:
+        return Response({"error": "User not found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    if 'picture' not in request.data:
+        return Response({"error": "Profile picture is required"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    if user.picture:
+        user.picture.delete()
+        
+    user.picture = request.data['picture']
+    user.save()
+    
+    serializer = CustomUserSerializer(user, context={'request': request})
+    return Response(serializer.data, status=status.HTTP_200_OK)
+    
     
     
 class CustomUserViewSet(viewsets.ReadOnlyModelViewSet):
