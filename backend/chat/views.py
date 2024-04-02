@@ -27,19 +27,57 @@ class ThreadViewset(viewsets.ModelViewSet):
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
     
-    
-class MessagesFromChannel(APIView):
+
+#austesten (Müsste nun geordnet sein nach Zeit) #auch thread Nachrichten sollen zurückkommen?? 
+class Messages_and_Thread_from_Channel(APIView):
     def get(self, request, channel_id, format=None):
-        messages = Message.objects.filter(source=channel_id)
-        serializer = MessageSerializer(messages, many=True)
-        return Response(serializer.data)
+        messages = Message.objects.filter(source=channel_id).order_by('-created_at')
+        message_serializer = MessageSerializer(messages, many=True)
+        
+        thread_messages = []
+        
+        for message in messages:
+            thread = Thread.objects.filter(source=message.id)
+            thread_messages.extend(thread)
+        
+        thread_serializer = ThreadSerializer(thread_messages, many=True)
+        
+        data = {
+            'messages': message_serializer.data,
+            'thread_messages': thread_serializer.data
+        }
+        return Response(data)
+    
+
+
+class Channel_and_Preview(APIView):
+    def get(self, request, user_id):
+        user = get_object_or_404(CustomUser, id=user_id)
+        channels = Channel.objects.filter(members=user)
+        last_messages_from_channels = []
+
+        for channel in channels:
+            last_message = Message.objects.filter(source=channel.id).order_by('-created_at').first()
+            if last_message:
+                last_messages_from_channels.append(last_message)
+
+        channel_serializer = ChannelSerializer(channels, many=True)
+        message_serializer = MessageSerializer(last_messages_from_channels, many=True)
+        
+        data = {
+            'channels': channel_serializer.data, 
+            'preview-messages': message_serializer.data  
+        }
+        return Response(data)
     
     
-class ThreadsFromChannel(APIView):
+    
+class ThreadsFromMessages(APIView):
     def get(self, request, message_id, format=None):
         threads = Thread.objects.filter(source=message_id)
         serializer = ThreadSerializer(threads, many=True)
         return Response(serializer.data)
+    
     
 class ChannelsForUser(APIView):
     def get(self, request, user_id):
