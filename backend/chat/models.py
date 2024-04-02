@@ -22,9 +22,9 @@ class Channel(models.Model):
 class Message(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True) 
     source = models.ForeignKey(Channel , on_delete=models.CASCADE)
-    reactions = models.ManyToManyField(CustomUser, related_name='message_reactions')
+    reactions = models.ManyToManyField(CustomUser, related_name='message_reactions' , blank=True ) # Muss leer sein dürfen blank=True 
     
     def __str__(self):
         return f"Message from {self.author} at {self.created_at}"
