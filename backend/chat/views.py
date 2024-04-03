@@ -66,7 +66,7 @@ class Channel_and_Preview(APIView):
         
         data = {
             'channels': channel_serializer.data, 
-            'preview-messages': message_serializer.data  
+            'preview_messages': message_serializer.data  
         }
         return Response(data)
     
