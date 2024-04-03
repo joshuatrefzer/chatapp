@@ -10,7 +10,7 @@ class MessageSerializer(serializers.ModelSerializer):
 class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
-        fields = ['id', 'author', 'content', 'created_at', 'source' ]
+        fields = ['id', 'author', 'content', 'created_at', 'source', 'reactions' ]
         
 
 
