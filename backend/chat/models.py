@@ -17,8 +17,6 @@ class Channel(models.Model):
     def __str__(self):
         return self.name
     
-
-    
     
 class Message(models.Model):
     hash = models.UUIDField(default=uuid.uuid4, editable=False)

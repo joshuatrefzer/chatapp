@@ -31,7 +31,7 @@ class ThreadViewset(viewsets.ModelViewSet):
 #austesten (Müsste nun geordnet sein nach Zeit) #auch thread Nachrichten sollen zurückkommen?? 
 class Messages_and_Thread_from_Channel(APIView):
     def get(self, request, channel_id, format=None):
-        messages = Message.objects.filter(source=channel_id).order_by('-created_at')
+        messages = Message.objects.filter(source=channel_id).order_by('created_at')
         message_serializer = MessageSerializer(messages, many=True)
         
         thread_messages = []
