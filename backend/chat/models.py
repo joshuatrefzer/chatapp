@@ -1,11 +1,12 @@
 from django.conf import settings
+import uuid
 from django.db import models
 
 from users.models import CustomUser
 
 
-# Create your models here.
 class Channel(models.Model):
+    hash = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
     members = models.ManyToManyField(CustomUser, related_name='channels')
@@ -20,6 +21,7 @@ class Channel(models.Model):
     
     
 class Message(models.Model):
+    hash = models.UUIDField(default=uuid.uuid4, editable=False)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True) 
@@ -31,6 +33,7 @@ class Message(models.Model):
     
     
 class Thread(models.Model):
+    hash = models.UUIDField(default=uuid.uuid4, editable=False)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)

@@ -3,7 +3,7 @@ from .models import Channel, Message, Thread
 
 # Register your models here.
 class ChannelAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'is_channel')
+    list_display = ('name', 'description', 'is_channel' , 'hash' )
     filter_horizontal = ('members', 'read_by')
 
 class MessageAdmin(admin.ModelAdmin):
