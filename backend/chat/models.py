@@ -38,7 +38,7 @@ class Thread(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     source = models.ForeignKey(Message , on_delete=models.CASCADE)
-    reactions = models.ManyToManyField(CustomUser, related_name='thread_reactions')
+    reactions = models.ManyToManyField(CustomUser, related_name='thread_reactions', blank=True )
     
     def __str__(self):
         return f"Message from {self.author} at {self.created_at}"
