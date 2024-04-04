@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 
+from users.serializers import CustomUserSerializer
 from users.models import CustomUser
 from .models import Channel, Message, Thread
 from .serializers import ChannelSerializer, MessageSerializer, ThreadSerializer
@@ -86,3 +87,33 @@ class ChannelsForUser(APIView):
         serializer = ChannelSerializer(channels, many=True)
         return Response(serializer.data)
     
+    
+class SearchAll(APIView):
+    def post(self, request):
+        search_value = request.data.get('search_value')
+        
+        channels = Channel.objects.filter(name__icontains=search_value)
+        messages = Message.objects.filter(content__icontains=search_value)
+        threads = Thread.objects.filter(content__icontains=search_value)
+        users = CustomUser.objects.filter(username__icontains=search_value) | CustomUser.objects.filter(email__icontains=search_value)
+        
+        channel_serializer = ChannelSerializer(channels, many=True)
+        message_serializer = MessageSerializer(messages, many=True)
+        thread_serializer = ThreadSerializer(threads, many=True)
+        user_serializer = CustomUserSerializer(users, many=True)
+        
+        data = {
+            'channels': channel_serializer.data,
+            'messages': message_serializer.data,
+            'threads': thread_serializer.data,
+            'users': user_serializer.data
+        }
+        
+        return Response(data)
+    
+class SearchUsers(APIView):
+    def post(self, request):
+        search_value = request.data.get('search_value')
+        users = CustomUser.objects.filter(username__icontains=search_value) | CustomUser.objects.filter(email__icontains=search_value)
+        user_serializer = CustomUserSerializer(users, many=True)
+        return Response(user_serializer.data)
