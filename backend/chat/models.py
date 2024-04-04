@@ -1,6 +1,9 @@
 from django.conf import settings
 import uuid
 from django.db import models
+import json
+
+
 
 from users.models import CustomUser
 
@@ -24,19 +27,19 @@ class Message(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True) 
     source = models.ForeignKey(Channel , on_delete=models.CASCADE)
-    reactions = models.ManyToManyField(CustomUser, related_name='message_reactions' , blank=True ) # Muss leer sein dürfen blank=True 
+    reactions = models.JSONField(blank=True, null=True)
     
     def __str__(self):
         return f"Message from {self.author} at {self.created_at}"
     
-    
+        
 class Thread(models.Model):
     hash = models.UUIDField(default=uuid.uuid4, editable=False)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     source = models.ForeignKey(Message , on_delete=models.CASCADE)
-    reactions = models.ManyToManyField(CustomUser, related_name='thread_reactions', blank=True )
+    reactions = models.JSONField(blank=True, null=True)
     
     def __str__(self):
         return f"Message from {self.author} at {self.created_at}"

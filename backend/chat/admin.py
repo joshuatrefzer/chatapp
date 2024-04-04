@@ -8,11 +8,11 @@ class ChannelAdmin(admin.ModelAdmin):
 
 class MessageAdmin(admin.ModelAdmin):
     list_display = ('author', 'content', 'created_at', 'source')
-    filter_horizontal = ('reactions',)
+    
 
 class ThreadAdmin(admin.ModelAdmin):
     list_display = ('author', 'content', 'created_at', 'source')
-    filter_horizontal = ('reactions',)
+    
 
 admin.site.register(Channel, ChannelAdmin)
 admin.site.register(Message, MessageAdmin)
