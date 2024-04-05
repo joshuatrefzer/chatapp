@@ -92,11 +92,16 @@ class SearchAll(APIView):
     def post(self, request):
         search_value = request.data.get('search_value')
         
-        if search_value: 
+        if search_value:  
             channels = Channel.objects.filter(name__icontains=search_value)
             messages = Message.objects.filter(content__icontains=search_value)
             threads = Thread.objects.filter(content__icontains=search_value)
-            users = CustomUser.objects.filter(username__icontains=search_value) | CustomUser.objects.filter(email__icontains=search_value)
+            
+            
+            users = CustomUser.objects.filter(username__icontains=search_value) \
+                                       .exclude(is_superuser=True) | \
+                    CustomUser.objects.filter(email__icontains=search_value) \
+                                     .exclude(is_superuser=True)
             
             channel_serializer = ChannelSerializer(channels, many=True)
             message_serializer = MessageSerializer(messages, many=True)
@@ -112,6 +117,7 @@ class SearchAll(APIView):
             
             return Response(data)
         else:
+            
             return Response({'error': 'Search value cannot be empty'}, status=400)
     
 class SearchUsers(APIView):
