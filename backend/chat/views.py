@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
-
+from django.db.models import Q
 from users.serializers import CustomUserSerializer
 from users.models import CustomUser
 from .models import Channel, Message, Thread
@@ -123,6 +123,13 @@ class SearchAll(APIView):
 class SearchUsers(APIView):
     def post(self, request):
         search_value = request.data.get('search_value')
-        users = CustomUser.objects.filter(username__icontains=search_value) | CustomUser.objects.filter(email__icontains=search_value)
-        user_serializer = CustomUserSerializer(users, many=True)
-        return Response(user_serializer.data)
+        
+        if search_value:
+            users = CustomUser.objects.filter(
+                Q(username__icontains=search_value) | Q(email__icontains=search_value)
+            ).exclude(is_superuser=True)
+            
+            user_serializer = CustomUserSerializer(users, many=True)
+            return Response(user_serializer.data)
+        else:
+            return Response({'error': 'Search value cannot be empty'}, status=400)

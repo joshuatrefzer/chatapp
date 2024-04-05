@@ -76,7 +76,7 @@ def upload_profile_image(request, user_id):
     
     
 class CustomUserViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = CustomUser.objects.all()
+    queryset = CustomUser.objects.filter(is_superuser=False)
     serializer_class = CustomUserSerializer
 
     def list(self, request, *args, **kwargs):
