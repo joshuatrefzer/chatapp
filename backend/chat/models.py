@@ -28,6 +28,7 @@ class Message(models.Model):
     created_at = models.DateTimeField(auto_now_add=True) 
     source = models.ForeignKey(Channel , on_delete=models.CASCADE)
     reactions = models.JSONField(blank=True, default=list)
+    attachment = models.FileField(upload_to='attachments', null=True, blank=True)
     
     def __str__(self):
         return f"Message from {self.author} at {self.created_at}"
@@ -40,6 +41,7 @@ class Thread(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     source = models.ForeignKey(Message , on_delete=models.CASCADE)
     reactions = models.JSONField(blank=True, default=list)
+    attachment = models.FileField(upload_to='attachments', null=True, blank=True)
     
     def __str__(self):
         return f"Message from {self.author} at {self.created_at}"

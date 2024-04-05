@@ -92,24 +92,27 @@ class SearchAll(APIView):
     def post(self, request):
         search_value = request.data.get('search_value')
         
-        channels = Channel.objects.filter(name__icontains=search_value)
-        messages = Message.objects.filter(content__icontains=search_value)
-        threads = Thread.objects.filter(content__icontains=search_value)
-        users = CustomUser.objects.filter(username__icontains=search_value) | CustomUser.objects.filter(email__icontains=search_value)
-        
-        channel_serializer = ChannelSerializer(channels, many=True)
-        message_serializer = MessageSerializer(messages, many=True)
-        thread_serializer = ThreadSerializer(threads, many=True)
-        user_serializer = CustomUserSerializer(users, many=True)
-        
-        data = {
-            'channels': channel_serializer.data,
-            'messages': message_serializer.data,
-            'threads': thread_serializer.data,
-            'users': user_serializer.data
-        }
-        
-        return Response(data)
+        if search_value: 
+            channels = Channel.objects.filter(name__icontains=search_value)
+            messages = Message.objects.filter(content__icontains=search_value)
+            threads = Thread.objects.filter(content__icontains=search_value)
+            users = CustomUser.objects.filter(username__icontains=search_value) | CustomUser.objects.filter(email__icontains=search_value)
+            
+            channel_serializer = ChannelSerializer(channels, many=True)
+            message_serializer = MessageSerializer(messages, many=True)
+            thread_serializer = ThreadSerializer(threads, many=True)
+            user_serializer = CustomUserSerializer(users, many=True)
+            
+            data = {
+                'channels': channel_serializer.data,
+                'messages': message_serializer.data,
+                'threads': thread_serializer.data,
+                'users': user_serializer.data
+            }
+            
+            return Response(data)
+        else:
+            return Response({'error': 'Search value cannot be empty'}, status=400)
     
 class SearchUsers(APIView):
     def post(self, request):

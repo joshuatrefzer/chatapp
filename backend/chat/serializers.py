@@ -5,12 +5,12 @@ from .models import Channel, Message, Thread
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ['id', 'author', 'content', 'created_at', 'source' , 'reactions', 'hash']
+        fields = ['id', 'author', 'content', 'created_at', 'source' , 'reactions', 'hash' , 'attachment']
         
 class ThreadSerializer(serializers.ModelSerializer):
     class Meta:
         model = Thread
-        fields = ['id', 'author', 'content', 'created_at', 'source', 'reactions' , 'hash']
+        fields = ['id', 'author', 'content', 'created_at', 'source', 'reactions' , 'hash' , 'attachment']
         
 
 
