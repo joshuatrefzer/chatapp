@@ -127,9 +127,9 @@ class SearchUsers(APIView):
         search_value = request.data.get('search_value')
         
         if search_value:
-            users = CustomUser.objects.filter(username__icontains=search_value) \
+            users = CustomUser.objects.filter(username__startswith=search_value) \
                                        .exclude(is_superuser=True)
-            users |= CustomUser.objects.filter(email__icontains=search_value) \
+            users |= CustomUser.objects.filter(email__startswith=search_value) \
                                        .exclude(is_superuser=True)
             
             user_serializer = ChatUserSerializer(users, many=True)
