@@ -6,7 +6,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'username', 'email', 'picture', 'is_online', 'password']  
+        fields = ['id', 'username', 'email', 'picture', 'is_online']  
         extra_kwargs = {'password': {'write_only': True}}  
         
     def get_picture(self, obj):
