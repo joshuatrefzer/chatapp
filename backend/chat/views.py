@@ -126,9 +126,10 @@ class SearchUsers(APIView):
         search_value = request.data.get('search_value')
         
         if search_value:
-            users = CustomUser.objects.filter(
-                Q(username__icontains=search_value) | Q(email__icontains=search_value)
-            ).exclude(is_superuser=True)
+            users = CustomUser.objects.filter(username__icontains=search_value) \
+                                       .exclude(is_superuser=True) | \
+                    CustomUser.objects.filter(email__icontains=search_value) \
+                                     .exclude(is_superuser=True)
             
             user_serializer = CustomUserSerializer(users, many=True)
             return Response(user_serializer.data)
