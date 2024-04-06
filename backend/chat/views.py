@@ -135,7 +135,7 @@ class SearchUsers(APIView):
             user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
-                users: user_serializer.data
+                'users': user_serializer.data
             }
             
             return Response(data)
