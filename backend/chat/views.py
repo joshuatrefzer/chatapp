@@ -133,7 +133,12 @@ class SearchUsers(APIView):
                                        .exclude(is_superuser=True)
             
             user_serializer = ChatUserSerializer(users, many=True)
-            return Response(user_serializer.data)
+            
+            data = {
+                users: user_serializer.data
+            }
+            
+            return Response(data)
             
         else:
             return Response({'error': 'Search value cannot be empty'}, status=400)
