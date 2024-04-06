@@ -7,7 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth.models import User
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import CustomUserSerializer
+from .serializers import CustomUserSerializer, ChatUserSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
 
@@ -75,9 +75,9 @@ def upload_profile_image(request, user_id):
     
     
     
-class CustomUserViewSet(viewsets.ReadOnlyModelViewSet):
+class ChatUserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.filter(is_superuser=False)
-    serializer_class = CustomUserSerializer
+    serializer_class = ChatUserSerializer
 
     def list(self, request, *args, **kwargs):
         if request.method != 'GET':

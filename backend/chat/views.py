@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from django.db.models import Q
-from users.serializers import CustomUserSerializer
+from users.serializers import CustomUserSerializer, ChatUserSerializer
 from users.models import CustomUser
 from .models import Channel, Message, Thread
 from .serializers import ChannelSerializer, MessageSerializer, ThreadSerializer
@@ -107,7 +107,7 @@ class SearchAll(APIView):
             channel_serializer = ChannelSerializer(channels, many=True)
             message_serializer = MessageSerializer(messages, many=True)
             thread_serializer = ThreadSerializer(threads, many=True)
-            user_serializer = CustomUserSerializer(users, many=True)
+            user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
                 'channels': channel_serializer.data,
@@ -121,18 +121,19 @@ class SearchAll(APIView):
             
             return Response({'error': 'Search value cannot be empty'}, status=400)
     
+    
 class SearchUsers(APIView):
     def post(self, request):
         search_value = request.data.get('search_value')
         
         if search_value:
-        #     users = CustomUser.objects.filter(username__icontains=search_value) \
-        #                                .exclude(is_superuser=True)
-        #     users |= CustomUser.objects.filter(email__icontains=search_value) \
-        #                                .exclude(is_superuser=True)
+            users = CustomUser.objects.filter(username__icontains=search_value) \
+                                       .exclude(is_superuser=True)
+            users |= CustomUser.objects.filter(email__icontains=search_value) \
+                                       .exclude(is_superuser=True)
             
-        #     user_serializer = CustomUserSerializer(users, many=True)
-        #     return Response(user_serializer.data)
-            return Response(search_value)
+            user_serializer = ChatUserSerializer(users, many=True)
+            return Response(user_serializer.data)
+            
         else:
             return Response({'error': 'Search value cannot be empty'}, status=400)

@@ -11,7 +11,7 @@ from users.models import CustomUser
 class Channel(models.Model):
     hash = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True) #Muss ein Charlfield sein. 
     members = models.ManyToManyField(CustomUser, related_name='channels')
     is_channel = models.BooleanField(default=True)
     picture = models.ImageField(upload_to='channel_pictures/', null=True, blank=True)
@@ -24,7 +24,7 @@ class Channel(models.Model):
 class Message(models.Model):
     hash = models.UUIDField(default=uuid.uuid4, editable=False)
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
-    content = models.TextField()
+    content = models.TextField() #Muss Charfield 
     created_at = models.DateTimeField(auto_now_add=True) 
     source = models.ForeignKey(Channel , on_delete=models.CASCADE)
     reactions = models.JSONField(blank=True, default=list)

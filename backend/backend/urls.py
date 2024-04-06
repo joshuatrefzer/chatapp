@@ -22,14 +22,14 @@ from django.conf import settings
 from rest_framework.routers import DefaultRouter
 
 from chat.views import ChannelViewSet, MessageViewSet, ThreadViewset, Messages_and_Thread_from_Channel, ThreadsFromMessages, ChannelsForUser, Channel_and_Preview, SearchAll, SearchUsers
-from users.views import CustomUserViewSet
+from users.views import ChatUserViewSet
 from users.views import login, signup, logout, upload_profile_image
 
 router = DefaultRouter()
 router.register(r'messages', MessageViewSet)
 router.register(r'channels', ChannelViewSet)
 router.register(r'threads', ThreadViewset)
-router.register(r'users', CustomUserViewSet)
+router.register(r'users', ChatUserViewSet)
 
 
 urlpatterns = [
