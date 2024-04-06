@@ -126,12 +126,13 @@ class SearchUsers(APIView):
         search_value = request.data.get('search_value')
         
         if search_value:
-            users = CustomUser.objects.filter(username__icontains=search_value) \
-                                       .exclude(is_superuser=True)
-            users |= CustomUser.objects.filter(email__icontains=search_value) \
-                                       .exclude(is_superuser=True)
+        #     users = CustomUser.objects.filter(username__icontains=search_value) \
+        #                                .exclude(is_superuser=True)
+        #     users |= CustomUser.objects.filter(email__icontains=search_value) \
+        #                                .exclude(is_superuser=True)
             
-            user_serializer = CustomUserSerializer(users, many=True)
-            return Response(user_serializer.data)
+        #     user_serializer = CustomUserSerializer(users, many=True)
+        #     return Response(user_serializer.data)
+            return Response(search_value)
         else:
             return Response({'error': 'Search value cannot be empty'}, status=400)
