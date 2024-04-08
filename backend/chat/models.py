@@ -11,7 +11,7 @@ from users.models import CustomUser
 class Channel(models.Model):
     hash = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True, null=True) #Muss ein Charlfield sein. 
+    description = models.TextField(blank=True, null=True)  
     members = models.ManyToManyField(CustomUser, related_name='channels')
     is_channel = models.BooleanField(default=True)
     picture = models.ImageField(upload_to='channel_pictures/', null=True, blank=True)
