@@ -96,13 +96,15 @@ class SearchAll(APIView):
         
         if search_value:  
             channels = Channel.objects.filter(name__icontains=search_value, members=user_id)
-            channel_ids = channels.values_list('id', flat=True) 
+            channels_filter = channels.filter(members=user_id)
+            channel_ids = channels_filter.values_list('id', flat=True) 
             
-            messages = Message.objects.filter(content__icontains=search_value, source__in=channel_ids)
-            message_ids = messages.values_list('id', flat=True)
+            messages = Message.objects.filter(content__icontains=search_value)
+            message_filter = messages.filter(source__in=channel_ids)
+            message_ids = message_filter.values_list('id', flat=True)
             
             threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
-            
+            threads_filter = threads.filter(source__in=message_ids)
             
             users = CustomUser.objects.filter(username__icontains=search_value) \
                                        .exclude(is_superuser=True) | \
