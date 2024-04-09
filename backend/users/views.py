@@ -46,7 +46,11 @@ def logout(request):
         user_token = Token.objects.filter(key=token).first()
         
         if user_token:
+            user = user_token.user
             user_token.delete()
+            user.is_online = False
+            user.save()
+            
             return Response({"detail": "Logout successful."}, status=status.HTTP_200_OK)
         else:
             return Response({"detail": "Invalid token."}, status=status.HTTP_400_BAD_REQUEST)
