@@ -10,12 +10,15 @@ from rest_framework.response import Response
 from .serializers import CustomUserSerializer, ChatUserSerializer
 from django.shortcuts import get_object_or_404
 from rest_framework.exceptions import ValidationError
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 CustomUser = get_user_model()
 
 @api_view(['POST'])
 def login(request):
+    #GEHT NICHT WENN USER EIN BILD HAT!!
     user = get_object_or_404(CustomUser, username=request.data['username'])
     if not user.check_password(request.data['password']):
         return Response({"detail": "Invalid credentials."}, status=status.HTTP_400_BAD_REQUEST)
@@ -80,6 +83,10 @@ def upload_profile_image(request, user_id):
     
     
 class ChatUserViewSet(viewsets.ReadOnlyModelViewSet):
+    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     queryset = CustomUser.objects.filter(is_superuser=False)
     serializer_class = ChatUserSerializer
 

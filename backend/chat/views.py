@@ -14,11 +14,19 @@ from rest_framework.permissions import IsAuthenticated
 
 # Create your views here.
 class MessageViewSet(viewsets.ModelViewSet):
+    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     
 
 class ChannelViewSet(viewsets.ModelViewSet):
+    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     queryset = Channel.objects.all()
     serializer_class = ChannelSerializer
     
@@ -28,12 +36,20 @@ class ChannelViewSet(viewsets.ModelViewSet):
     
     
 class ThreadViewset(viewsets.ModelViewSet):
+    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     queryset = Thread.objects.all()
     serializer_class = ThreadSerializer
     
 
 #austesten (Müsste nun geordnet sein nach Zeit) #auch thread Nachrichten sollen zurückkommen?? 
 class Messages_and_Thread_from_Channel(APIView):
+    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, channel_id, format=None):
         messages = Message.objects.filter(source=channel_id).order_by('created_at')
         message_serializer = MessageSerializer(messages, many=True)
@@ -55,6 +71,9 @@ class Messages_and_Thread_from_Channel(APIView):
 
 
 class Channel_and_Preview(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, user_id):
         user = get_object_or_404(CustomUser, id=user_id)
         channels = Channel.objects.filter(members=user)
@@ -77,6 +96,10 @@ class Channel_and_Preview(APIView):
     
     
 class ThreadsFromMessages(APIView):
+    
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, message_id, format=None):
         threads = Thread.objects.filter(source=message_id)
         serializer = ThreadSerializer(threads, many=True)
@@ -84,6 +107,9 @@ class ThreadsFromMessages(APIView):
     
     
 class ChannelsForUser(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def get(self, request, user_id):
         user = get_object_or_404(CustomUser, id=user_id)
         channels = Channel.objects.filter(members=user)
@@ -136,6 +162,9 @@ class SearchAll(APIView):
     
     
 class SearchUsers(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request):
         search_value = request.data.get('search_value')
         
