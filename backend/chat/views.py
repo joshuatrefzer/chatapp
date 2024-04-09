@@ -8,6 +8,8 @@ from .serializers import ChannelSerializer, MessageSerializer, ThreadSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 # Create your views here.
@@ -90,6 +92,10 @@ class ChannelsForUser(APIView):
     
     
 class SearchAll(APIView):
+    ##HIER AUTH
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+    
     def post(self, request):
         search_value = request.data.get('search_value')
         user_id = request.data.get('current_user') 
