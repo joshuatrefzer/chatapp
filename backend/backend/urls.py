@@ -38,6 +38,7 @@ urlpatterns = [
     re_path('login', login),
     re_path('logout', logout),
     re_path('signup', signup),
+    path('password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
     path('search', SearchAll.as_view(), name='search_all'),
     path('user-search', SearchUsers.as_view(), name='search_user'),
     path('messages-and-thread-from-channel/<int:channel_id>/', Messages_and_Thread_from_Channel.as_view(), name='messages_from_channel'),

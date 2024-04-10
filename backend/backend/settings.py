@@ -13,10 +13,17 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 
+
+from dotenv import load_dotenv
+
+dotenv_path = os.path.join(os.path.dirname(__file__), 'dotenv', '.env')
+load_dotenv(dotenv_path)
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 CLIENT_BASE_URL = "http://localhost:4200"
+HOST_BACKEND_URL = "https://joshuatrefzer-backend.com"
 BACKEND_BASE_URL = "http://localhost:8000"
 SERVER_BASE_URL = BACKEND_BASE_URL # https://joshuatrfezer-backend.com
 
@@ -44,6 +51,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    'django_rest_passwordreset',
     "rest_framework.authtoken",
     "corsheaders",
     "users",
@@ -92,30 +100,38 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'chatdb',
+#         'USER': 'joshua',
+#         'PASSWORD': 'mysql',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#         }
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'chatdb',
-        'USER': 'joshua',
-        'PASSWORD': 'mysql',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        }
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "chatapp",
+        "USER": "elijahjosh",
+        "PASSWORD": "elijahjoshua",
+        "HOST": "localhost",
+        "PORT": "5433",
     }
 }
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql_psycopg2",
-#         "NAME": "chatapp",
-#         "USER": "elijahjosh",
-#         "PASSWORD": "elijahjoshua",
-#         "HOST": "localhost",
-#         "PORT": "5433",
-#     }
-# }
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = os.getenv("DEVMAIL")
+EMAIL_HOST_USER = os.getenv("DEVMAIL")
+EMAIL_HOST_PASSWORD = os.getenv("DEVPW")
 
 
 
