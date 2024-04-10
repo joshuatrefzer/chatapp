@@ -23,7 +23,8 @@ def login(request):
     if not user.check_password(request.data['password']):
         return Response({"detail": "Invalid credentials."}, status=status.HTTP_400_BAD_REQUEST)
     token, created = Token.objects.get_or_create(user=user)
-    serializer = CustomUserSerializer(user)
+    #serializer = CustomUserSerializer(user)
+    serializer = ChatUserSerializer(user)
     user.is_online = True
     return Response({"token": token.key, "user": serializer.data})
 
