@@ -100,30 +100,30 @@ WSGI_APPLICATION = "backend.wsgi.application"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'chatdb',
-#         'USER': 'joshua',
-#         'PASSWORD': 'mysql',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#         'OPTIONS': {
-#             'charset': 'utf8mb4',
-#         }
-#     }
-# }
-
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "chatapp",
-        "USER": "elijahjosh",
-        "PASSWORD": "elijahjoshua",
-        "HOST": "localhost",
-        "PORT": "5433",
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'chatdb',
+        'USER': 'joshua',
+        'PASSWORD': 'mysql',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        }
     }
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql_psycopg2",
+#         "NAME": "chatapp",
+#         "USER": "elijahjosh",
+#         "PASSWORD": "elijahjoshua",
+#         "HOST": "localhost",
+#         "PORT": "5433",
+#     }
+# }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
