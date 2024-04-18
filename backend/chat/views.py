@@ -143,9 +143,9 @@ class SearchAll(APIView):
                     CustomUser.objects.filter(email__icontains=search_value) \
                                      .exclude(is_superuser=True)
             
-            channel_serializer = ChannelSerializer(channels, many=True)
-            message_serializer = MessageSerializer(messages, many=True)
-            thread_serializer = ThreadSerializer(threads, many=True)
+            channel_serializer = ChannelSerializer(channels_filter, many=True)
+            message_serializer = MessageSerializer(message_filter, many=True)
+            thread_serializer = ThreadSerializer(threads_filter, many=True)
             user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
