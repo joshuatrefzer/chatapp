@@ -24,6 +24,7 @@ def login(request):
     token, created = Token.objects.get_or_create(user=user)
     serializer = ChatUserSerializer(user)
     user.is_online = True
+    user.save()
     return Response({"token": token.key, "user": serializer.data})
 
 
