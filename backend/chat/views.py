@@ -173,12 +173,12 @@ class SearchAll(APIView):
             channels = Channel.objects.filter(name__icontains=search_value, members=user)
             channel_ids = channels.values_list('id', flat=True) 
             
-            messages_to_response = []
+        #     messages_to_response = []
 
-        for id in channel_ids:
-            msg = Message.objects.filter(source=id, content__icontains=search_value)
-            if msg:
-                messages_to_response.append(msg)
+        # for id in channel_ids:
+        #     msg = Message.objects.filter(source=id, content__icontains=search_value)
+        #     if msg:
+        #         messages_to_response.append(msg)
             
                
     
@@ -197,13 +197,13 @@ class SearchAll(APIView):
                                      .exclude(is_superuser=True)
             
             channel_serializer = ChannelSerializer(channels, many=True)
-            message_serializer = MessageSerializer(messages_to_response, many=True)
+            # message_serializer = MessageSerializer(messages_to_response, many=True)
             # thread_serializer = ThreadSerializer(threads, many=True)
             # user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
                 'channels': channel_serializer.data,
-                'messages': message_serializer.data,
+                
                 
             }
             
