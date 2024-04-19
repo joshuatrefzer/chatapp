@@ -127,41 +127,38 @@ class SearchAll(APIView):
         user_id = request.data.get('current_user') 
         user = get_object_or_404(CustomUser, id=user_id)
         
-        if search_value:  
-            #wenn der Channel name searchvalue entscpricht und members= user ist.
+        if search_value:
+            # Suchen von Kanälen, die den Suchwert im Namen haben und denen der Benutzer angehört
             channels = Channel.objects.filter(name__icontains=search_value, members=user)
-            #liste von channel ids (funktioniert!)
             channel_ids = channels.values_list('id', flat=True) 
             
-            message_ids = Message.objects.filter(source__in=channel_ids, content__icontains=search_value) \
-                                         .values_list('id', flat=True)
+            # Suchen von Nachrichten in den gefundenen Kanälen mit dem Suchwert im Inhalt
+            messages = Message.objects.filter(source__in=channel_ids, content__icontains=search_value)
             
-            threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
-            # threads_filter = threads.filter(source__in=message_ids)
+            # Suchen von Threads mit dem Suchwert im Inhalt und basierend auf den gefundenen Nachrichten
+            threads = Thread.objects.filter(source__in=messages, content__icontains=search_value)
             
-            users = CustomUser.objects.filter(username__icontains=search_value) \
-                                       .exclude(is_superuser=True) | \
-                    CustomUser.objects.filter(email__icontains=search_value) \
-                                     .exclude(is_superuser=True)
+            # Suchen von Benutzern mit dem Suchwert im Benutzernamen oder in der E-Mail-Adresse
+            users = CustomUser.objects.filter(Q(username__icontains=search_value) |
+                                               Q(email__icontains=search_value),
+                                               is_superuser=False)
             
+            # Serialisierung der Daten
             channel_serializer = ChannelSerializer(channels, many=True)
-            message_serializer = MessageSerializer(Message.objects.filter(id__in=message_ids), many=True)
+            message_serializer = MessageSerializer(messages, many=True)
             thread_serializer = ThreadSerializer(threads, many=True)
             user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
                 'channels': channel_serializer.data,
-                'messages': message_ids,
+                'messages': message_serializer.data,
                 'threads': thread_serializer.data,
                 'users': user_serializer.data,
-                'channel_ids': channel_ids
             }
             
             return Response(data)
         else:
-            
             return Response({'error': 'Search value cannot be empty'}, status=400)
-    
     
 class SearchUsers(APIView):
     authentication_classes = [TokenAuthentication]
