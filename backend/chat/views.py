@@ -10,7 +10,6 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from watson import search as watson_search
 
 
 # Create your views here.
@@ -127,7 +126,7 @@ class ChannelsForUser(APIView):
 #         user_id = request.data.get('current_user') 
 #         user = get_object_or_404(CustomUser, id=user_id)
         
-#         if search_value:  
+#         if search_value & user:  
 #             channels = Channel.objects.filter(name__icontains=search_value, members=user)
 #             # channels_filter = channels.filter(members=user_id)
 #             channel_ids = channels.values_list('id', flat=True) 
@@ -160,46 +159,60 @@ class ChannelsForUser(APIView):
             
 #             return Response({'error': 'Search value cannot be empty'}, status=400)
     
+    
 class SearchAll(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
-
+    
     def post(self, request):
         search_value = request.data.get('search_value')
-        user_id = request.data.get('current_user')
+        user_id = request.data.get('current_user') 
         user = get_object_or_404(CustomUser, id=user_id)
+        
+        if search_value & user:  
+            channels = Channel.objects.filter(name__icontains=search_value, members=user)
+            channel_ids = channels.values_list('id', flat=True) 
+            
+            messages_to_response = []
 
-        if search_value:
-            # Suche nach Kanälen
-            channel_results = watson_search.filter(Channel.objects.all(), search_value)
-            channels = channel_results.filter(members=user)
+        for id in channel_ids:
+            msg = Message.objects.filter(source=id, content__icontains=search_value)
+            if msg:
+                messages_to_response.append(msg)
+            
+               
+    
+            # message_ids = messages.values_list('id', flat=True)
+            
+            
+            
+            
+            
+            # threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
+            # threads_filter = threads.filter(source__in=message_ids)
+            
+            users = CustomUser.objects.filter(username__icontains=search_value) \
+                                       .exclude(is_superuser=True) | \
+                    CustomUser.objects.filter(email__icontains=search_value) \
+                                     .exclude(is_superuser=True)
+            
             channel_serializer = ChannelSerializer(channels, many=True)
-
-            # Suche nach Nachrichten
-            message_results = watson_search.filter(Message.objects.all(), search_value)
-            messages = message_results.filter(channel__in=channels)
-            message_serializer = MessageSerializer(messages, many=True)
-
-            # Suche nach Threads
-            thread_results = watson_search.filter(Thread.objects.all(), search_value)
-            threads = thread_results.filter(source__in=messages)
-            thread_serializer = ThreadSerializer(threads, many=True)
-
-            # Suche nach Benutzern
-            user_results = watson_search.filter(CustomUser.objects.all(), search_value).exclude(is_superuser=True)
-            users = user_results.exclude(id=user_id)
-            user_serializer = ChatUserSerializer(users, many=True)
-
+            message_serializer = MessageSerializer(messages_to_response, many=True)
+            # thread_serializer = ThreadSerializer(threads, many=True)
+            # user_serializer = ChatUserSerializer(users, many=True)
+            
             data = {
                 'channels': channel_serializer.data,
                 'messages': message_serializer.data,
-                'threads': thread_serializer.data,
-                'users': user_serializer.data,
+                
             }
-
+            
             return Response(data)
         else:
-            return Response({'error': 'Search value cannot be empty'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            return Response({'error': 'Search value cannot be empty'}, status=400)
+    
+    
     
     
 class SearchUsers(APIView):
