@@ -12,6 +12,8 @@ class ThreadSerializer(serializers.ModelSerializer):
         model = Thread
         fields = ['id', 'author', 'content', 'created_at', 'source', 'reactions' , 'hash' , 'attachment']
         
+        
+        
 
 
 class ChannelSerializer(serializers.ModelSerializer):

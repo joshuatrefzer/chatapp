@@ -117,8 +117,7 @@ class ChannelsForUser(APIView):
         return Response(serializer.data)
     
     
-# class SearchAll(APIView):
-    ##HIER AUTH
+class SearchAll(APIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
@@ -132,7 +131,7 @@ class ChannelsForUser(APIView):
             # channels_filter = channels.filter(members=user_id)
             channel_ids = channels.values_list('id', flat=True) 
             
-            messages = Message.objects.filter(source__in=channel_ids, content__icontains=search_value)
+            messages = Message.objects.filter(channel__in=channels, source__id__in=channels.values('id'), content__icontains=search_value)
             message_ids = messages.values_list('id', flat=True)
             
             threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
@@ -162,33 +161,6 @@ class ChannelsForUser(APIView):
     
     
     
-class SearchAll(APIView):
-    def post(self, request, *args, **kwargs):
-        user_id = request.data.get('user_id', None)
-        search_input = request.data.get('search_input', None)
-        
-        if not user_id or not search_input:
-            return Response({'error': 'User ID and search input are required'}, status=400)
-        
-        # Finde alle Channels, in denen der User Mitglied ist
-        user_channels = Channel.objects.filter(members__id=user_id)
-        
-        # Durchsuche die Nachrichten in den gefundenen Channels nach der Sucheingabe
-        matching_messages = Message.objects.filter(channel__in=user_channels, source__id__in=user_channels.values('id'), content__icontains=search_input)
-        
-        # Serialisiere die gefundenen Nachrichten
-        message_serializer = MessageSerializer(matching_messages, many=True)
-        
-        # Serialisiere die gefundenen Channels
-        channel_serializer = ChannelSerializer(user_channels, many=True)
-        
-        # Erstelle die Response
-        response_data = {
-            'messages': message_serializer.data,
-            'channels': channel_serializer.data
-        }
-        
-        return Response(response_data)
     
 class SearchUsers(APIView):
     authentication_classes = [TokenAuthentication]
