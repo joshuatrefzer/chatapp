@@ -151,7 +151,8 @@ class SearchAll(APIView):
                 'channels': channel_serializer.data,
                 'messages': message_serializer.data,
                 'threads': thread_serializer.data,
-                'users': user_serializer.data
+                'users': user_serializer.data,
+                'channel_ids': channel_ids
             }
             
             return Response(data)
