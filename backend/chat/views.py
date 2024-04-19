@@ -169,7 +169,7 @@ class SearchAll(APIView):
         user_id = request.data.get('current_user') 
         user = get_object_or_404(CustomUser, id=user_id)
         
-        if search_value & user:  
+        if search_value and user:  
             channels = Channel.objects.filter(name__icontains=search_value, members=user)
             channel_ids = channels.values_list('id', flat=True) 
             
