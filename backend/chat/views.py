@@ -125,9 +125,10 @@ class SearchAll(APIView):
     def post(self, request):
         search_value = request.data.get('search_value')
         user_id = request.data.get('current_user') 
+        user = get_object_or_404(CustomUser, id=user_id)
         
         if search_value:  
-            channels = Channel.objects.filter(name__icontains=search_value, members=user_id)
+            channels = Channel.objects.filter(name__icontains=search_value, members=user)
             # channels_filter = channels.filter(members=user_id)
             channel_ids = channels.values_list('id', flat=True) 
             
