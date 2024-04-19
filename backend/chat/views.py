@@ -133,15 +133,8 @@ class SearchAll(APIView):
             #liste von channel ids (funktioniert!)
             channel_ids = channels.values_list('id', flat=True) 
             
-            messages_to_response = []
-            
-            for id in channel_ids:
-                msg = Message.objects.filter(source=id)
-                messages_to_response.extend(msg)
-                
-    
-            messages = Message.objects.filter(id__in=messages_to_response, content__icontains=search_value)
-            message_ids = messages.values_list('id', flat=True)
+            message_ids = Message.objects.filter(source__in=channel_ids, content__icontains=search_value) \
+                                         .values_list('id', flat=True)
             
             threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
             # threads_filter = threads.filter(source__in=message_ids)
@@ -152,7 +145,7 @@ class SearchAll(APIView):
                                      .exclude(is_superuser=True)
             
             channel_serializer = ChannelSerializer(channels, many=True)
-            message_serializer = MessageSerializer(messages, many=True)
+            message_serializer = MessageSerializer(Message.objects.filter(id__in=message_ids), many=True)
             thread_serializer = ThreadSerializer(threads, many=True)
             user_serializer = ChatUserSerializer(users, many=True)
             
