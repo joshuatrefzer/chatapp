@@ -118,7 +118,7 @@ class ChannelsForUser(APIView):
     
     
 class SearchAll(APIView):
-    ##HIER AUTH
+   
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
@@ -129,10 +129,16 @@ class SearchAll(APIView):
         
         if search_value:  
             channels = Channel.objects.filter(name__icontains=search_value, members=user)
-            # channels_filter = channels.filter(members=user_id)
             channel_ids = channels.values_list('id', flat=True) 
             
-            messages = Message.objects.filter(source__in=channel_ids, content__icontains=search_value)
+            messages_to_response = []
+            
+            for id in channel_ids:
+                msg = Message.objects.filter(source=id)
+                messages_to_response.extend(msg)
+                
+    
+            messages = Message.objects.filter(source__in=messages_to_response, content__icontains=search_value)
             message_ids = messages.values_list('id', flat=True)
             
             threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
