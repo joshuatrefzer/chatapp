@@ -118,7 +118,7 @@ class ChannelsForUser(APIView):
     
     
 class SearchAll(APIView):
-   
+    ##HIER AUTH
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
@@ -127,23 +127,22 @@ class SearchAll(APIView):
         user_id = request.data.get('current_user') 
         user = get_object_or_404(CustomUser, id=user_id)
         
-        if search_value:
-            # Suchen von Kanälen, die den Suchwert im Namen haben und denen der Benutzer angehört
+        if search_value:  
             channels = Channel.objects.filter(name__icontains=search_value, members=user)
+            # channels_filter = channels.filter(members=user_id)
             channel_ids = channels.values_list('id', flat=True) 
             
-            # Suchen von Nachrichten in den gefundenen Kanälen mit dem Suchwert im Inhalt
             messages = Message.objects.filter(source__in=channel_ids, content__icontains=search_value)
+            message_ids = messages.values_list('id', flat=True)
             
-            # Suchen von Threads mit dem Suchwert im Inhalt und basierend auf den gefundenen Nachrichten
-            threads = Thread.objects.filter(source__in=messages, content__icontains=search_value)
+            threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
+            # threads_filter = threads.filter(source__in=message_ids)
             
-            # Suchen von Benutzern mit dem Suchwert im Benutzernamen oder in der E-Mail-Adresse
-            users = CustomUser.objects.filter(Q(username__icontains=search_value) |
-                                               Q(email__icontains=search_value),
-                                               is_superuser=False)
+            users = CustomUser.objects.filter(username__icontains=search_value) \
+                                       .exclude(is_superuser=True) | \
+                    CustomUser.objects.filter(email__icontains=search_value) \
+                                     .exclude(is_superuser=True)
             
-            # Serialisierung der Daten
             channel_serializer = ChannelSerializer(channels, many=True)
             message_serializer = MessageSerializer(messages, many=True)
             thread_serializer = ThreadSerializer(threads, many=True)
@@ -158,7 +157,9 @@ class SearchAll(APIView):
             
             return Response(data)
         else:
+            
             return Response({'error': 'Search value cannot be empty'}, status=400)
+    
     
 class SearchUsers(APIView):
     authentication_classes = [TokenAuthentication]
