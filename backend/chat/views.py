@@ -161,58 +161,47 @@ class ChannelsForUser(APIView):
     
     
 class SearchAll(APIView):
+    ##HIER AUTH
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
         search_value = request.data.get('search_value')
         user_id = request.data.get('current_user') 
-        user = get_object_or_404(CustomUser, id=user_id)
         
-        if search_value and user:  
-            channels = Channel.objects.filter(name__icontains=search_value, members=user)
-            channel_ids = channels.values_list('id', flat=True) 
+        if search_value:  
+            channels = Channel.objects.filter(name__icontains=search_value, members=user_id)
+            channels_filter = channels.filter(members=user_id)
+            channel_ids = channels_filter.values_list('id', flat=True) 
             
-        #     messages_to_response = []
-
-        # for id in channel_ids:
-        #     msg = Message.objects.filter(source=id, content__icontains=search_value)
-        #     if msg:
-        #         messages_to_response.append(msg)
+            messages = Message.objects.filter(content__icontains=search_value)
+            message_filter = messages.filter(source__in=channel_ids)
+            message_ids = message_filter.values_list('id', flat=True)
             
-               
-    
-            # message_ids = messages.values_list('id', flat=True)
-            
-            
-            
-            
-            
-            # threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
-            # threads_filter = threads.filter(source__in=message_ids)
+            threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
+            threads_filter = threads.filter(source__in=message_ids)
             
             users = CustomUser.objects.filter(username__icontains=search_value) \
                                        .exclude(is_superuser=True) | \
                     CustomUser.objects.filter(email__icontains=search_value) \
                                      .exclude(is_superuser=True)
             
-            channel_serializer = ChannelSerializer(channels, many=True)
-            # message_serializer = MessageSerializer(messages_to_response, many=True)
-            # thread_serializer = ThreadSerializer(threads, many=True)
-            # user_serializer = ChatUserSerializer(users, many=True)
+            channel_serializer = ChannelSerializer(channels_filter, many=True)
+            message_serializer = MessageSerializer(message_filter, many=True)
+            thread_serializer = ThreadSerializer(threads_filter, many=True)
+            user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
                 'channels': channel_serializer.data,
-                
-                
+                'messages': message_serializer.data,
+                'threads': thread_serializer.data,
+                'users': user_serializer.data
             }
             
             return Response(data)
         else:
             
             return Response({'error': 'Search value cannot be empty'}, status=400)
-    
-    
     
     
 class SearchUsers(APIView):
