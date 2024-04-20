@@ -179,8 +179,10 @@ class SearchAll(APIView):
             
             messages = Message.objects.filter(content__icontains=search_value) 
             filtered_messages = messages.filter(source__in=chats)
-           
+            filtered_message_ids = [msg.id for msg in filtered_messages]
+            
             threads = Thread.objects.filter(content__icontains=search_value)
+            filtered_threads = threads.filter(source__in=filtered_message_ids)
             
             users = CustomUser.objects.filter(username__icontains=search_value) \
                                        .exclude(is_superuser=True) | \
@@ -189,7 +191,7 @@ class SearchAll(APIView):
             
             channel_serializer = ChannelSerializer(channels_filter, many=True)
             message_serializer = MessageSerializer(filtered_messages, many=True)
-            thread_serializer = ThreadSerializer(threads, many=True)
+            thread_serializer = ThreadSerializer(filtered_threads, many=True)
             user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
