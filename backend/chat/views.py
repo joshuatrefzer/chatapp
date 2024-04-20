@@ -170,13 +170,14 @@ class SearchAll(APIView):
     
     def post(self, request):
         search_value = request.data.get('search_value')
+        chats = request.data.get('chats')
         user_id = request.data.get('current_user') 
         
         if search_value and user_id:  
             channels = Channel.objects.filter(name__icontains=search_value, members=user_id)
             channels_filter = channels.filter(members=user_id)
             
-            messages = Message.objects.filter(content__icontains=search_value)
+            messages = Message.objects.filter(content__icontains=search_value, source__in=chats) 
            
             threads = Thread.objects.filter(content__icontains=search_value)
             
