@@ -118,7 +118,7 @@ class ChannelsForUser(APIView):
     
     
     
-    
+
 # class SearchAll(APIView):
 #     ##HIER AUTH
 #     authentication_classes = [TokenAuthentication]
@@ -126,19 +126,19 @@ class ChannelsForUser(APIView):
     
 #     def post(self, request):
 #         search_value = request.data.get('search_value')
+#         chats = request.data.get('chats')
 #         user_id = request.data.get('current_user') 
         
 #         if search_value and user_id:  
 #             channels = Channel.objects.filter(name__icontains=search_value, members=user_id)
 #             channels_filter = channels.filter(members=user_id)
-#             channel_ids = channels_filter.values_list('id', flat=True) 
             
-#             messages = Message.objects.filter(content__icontains=search_value)
-#             message_filter = messages.filter(source__in=channel_ids)
-#             message_ids = message_filter.values_list('id', flat=True)
+#             messages = Message.objects.filter(content__icontains=search_value) 
+#             filtered_messages = messages.filter(source__in=chats)
+#             filtered_message_ids = [msg.id for msg in filtered_messages]
             
-#             threads = Thread.objects.filter(content__icontains=search_value, source__in=message_ids)
-#             threads_filter = threads.filter(source__in=message_ids)
+#             threads = Thread.objects.filter(content__icontains=search_value)
+#             filtered_threads = threads.filter(source__in=filtered_message_ids)
             
 #             users = CustomUser.objects.filter(username__icontains=search_value) \
 #                                        .exclude(is_superuser=True) | \
@@ -146,8 +146,8 @@ class ChannelsForUser(APIView):
 #                                      .exclude(is_superuser=True)
             
 #             channel_serializer = ChannelSerializer(channels_filter, many=True)
-#             message_serializer = MessageSerializer(message_filter, many=True)
-#             thread_serializer = ThreadSerializer(threads_filter, many=True)
+#             message_serializer = MessageSerializer(filtered_messages, many=True)
+#             thread_serializer = ThreadSerializer(filtered_threads, many=True)
 #             user_serializer = ChatUserSerializer(users, many=True)
             
 #             data = {
@@ -161,7 +161,8 @@ class ChannelsForUser(APIView):
 #         else:
             
 #             return Response({'error': 'Search value cannot be empty'}, status=400)
-    
+        
+
 
 class SearchAll(APIView):
     ##HIER AUTH
@@ -174,15 +175,15 @@ class SearchAll(APIView):
         user_id = request.data.get('current_user') 
         
         if search_value and user_id:  
-            channels = Channel.objects.filter(name__icontains=search_value, members=user_id)
-            channels_filter = channels.filter(members=user_id)
+            channels_from_user = Channel.objects.filter(members=user_id)
+            channels_filter = channels_from_user.filter(name__icontains=search_value)
             
-            messages = Message.objects.filter(content__icontains=search_value) 
-            filtered_messages = messages.filter(source__in=chats)
-            filtered_message_ids = [msg.id for msg in filtered_messages]
+            messages_from_user = Message.objects.filter(source__in=chats) 
+            messages_filter = messages_from_user.filter(content__icontains=search_value)
+            filtered_message_ids = [msg.id for msg in messages_from_user]
             
-            threads = Thread.objects.filter(content__icontains=search_value)
-            filtered_threads = threads.filter(source__in=filtered_message_ids)
+            threads = Thread.objects.filter(content__icontains=search_value, source__in=filtered_message_ids)
+            # filtered_threads = threads.filter(source__in=filtered_message_ids)
             
             users = CustomUser.objects.filter(username__icontains=search_value) \
                                        .exclude(is_superuser=True) | \
@@ -190,8 +191,8 @@ class SearchAll(APIView):
                                      .exclude(is_superuser=True)
             
             channel_serializer = ChannelSerializer(channels_filter, many=True)
-            message_serializer = MessageSerializer(filtered_messages, many=True)
-            thread_serializer = ThreadSerializer(filtered_threads, many=True)
+            message_serializer = MessageSerializer(messages_filter, many=True)
+            thread_serializer = ThreadSerializer(threads, many=True)
             user_serializer = ChatUserSerializer(users, many=True)
             
             data = {
@@ -205,8 +206,6 @@ class SearchAll(APIView):
         else:
             
             return Response({'error': 'Search value cannot be empty'}, status=400)
-        
-        
     
 class SearchUsers(APIView):
     authentication_classes = [TokenAuthentication]
