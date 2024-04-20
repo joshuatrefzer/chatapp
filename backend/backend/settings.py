@@ -23,7 +23,7 @@ load_dotenv(dotenv_path)
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # CLIENT_BASE_URL = "http://localhost:4200"
-CLIENT_BASE_URL = "https://joshuatrefzer-backend.de"
+CLIENT_BASE_URL = "https://bubbles.joshuatrefzer-backend.de"
 HOST_BACKEND_URL = "https://joshuatrefzer-backend.com"
 BACKEND_BASE_URL = "http://localhost:8000"
 SERVER_BASE_URL = BACKEND_BASE_URL # https://joshuatrfezer-backend.com
