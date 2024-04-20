@@ -177,7 +177,7 @@ class SearchAll(APIView):
             channels = Channel.objects.filter(name__icontains=search_value, members=user_id)
             channels_filter = channels.filter(members=user_id)
             
-            messages = Message.objects.filter(content__icontains=search_value, source__in=chats) 
+            messages = Message.objects.filter(content__icontains=search_value) 
            
             threads = Thread.objects.filter(content__icontains=search_value)
             
