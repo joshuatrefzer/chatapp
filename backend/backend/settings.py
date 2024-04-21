@@ -22,7 +22,7 @@ load_dotenv(dotenv_path)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-CLIENT_BASE_URL = "https://bubbleschat"
+CLIENT_BASE_URL = "https://bubbleschat.de"
 CLIENT_BASE_URL_LOCAL = "http://localhost:4200"
 # CLIENT_BASE_URL = "https://bubbles.joshuatrefzer-backend.de"
 HOST_BACKEND_URL = "https://joshuatrefzer-backend.com"
