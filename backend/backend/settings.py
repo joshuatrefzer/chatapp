@@ -22,8 +22,8 @@ load_dotenv(dotenv_path)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# CLIENT_BASE_URL = "http://localhost:4200"
-CLIENT_BASE_URL = "https://bubbles.joshuatrefzer-backend.de"
+CLIENT_BASE_URL = "http://localhost:4200"
+# CLIENT_BASE_URL = "https://bubbles.joshuatrefzer-backend.de"
 HOST_BACKEND_URL = "https://joshuatrefzer-backend.com"
 BACKEND_BASE_URL = "http://localhost:8000"
 SERVER_BASE_URL = BACKEND_BASE_URL # https://joshuatrfezer-backend.com
@@ -37,9 +37,9 @@ SECRET_KEY = "django-insecure-t%jd)ypb%*1-8e=f%@ype0_*5!9x#odp!i=ns3aoiu-63iing%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [CLIENT_BASE_URL ,BACKEND_BASE_URL, 'localhost' , 'joshuatrefzer-backend.com', '127.0.0.1']
+ALLOWED_HOSTS = [CLIENT_BASE_URL ,BACKEND_BASE_URL, 'localhost' , 'joshuatrefzer-backend.com', '127.0.0.1',  "https://bubbles.joshuatrefzer-backend.de"]
 
-CORS_ALLOWED_ORIGINS = [BACKEND_BASE_URL, CLIENT_BASE_URL]
+CORS_ALLOWED_ORIGINS = [BACKEND_BASE_URL, CLIENT_BASE_URL,  "https://bubbles.joshuatrefzer-backend.de"]
 
 
 # Application definition
