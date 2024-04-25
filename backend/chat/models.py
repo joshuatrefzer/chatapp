@@ -12,7 +12,7 @@ class Channel(models.Model):
     description = models.TextField(blank=True, null=True)  
     members = models.ManyToManyField(CustomUser, related_name='channels')
     is_channel = models.BooleanField(default=True)
-    picture = ResizedImageField(force_format="WEBP", size=[90, None], quality=75, upload_to="channel_pictures/", blank=True, null=True)
+    picture = ResizedImageField(force_format="WEBP", size=[150, None], quality=75, upload_to="channel_pictures/", blank=True, null=True)
     read_by = models.ManyToManyField(CustomUser, related_name='read_channels', blank=True)
     
     def __str__(self):
