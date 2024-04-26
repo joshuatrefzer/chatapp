@@ -1,6 +1,7 @@
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from django.core.files.storage import default_storage
+from django.http import HttpRequest
 from .models import Channel, Message, Thread
 
 @receiver(pre_save, sender=Channel)
@@ -16,9 +17,11 @@ def delete_previous_picture(sender, instance, **kwargs):
         
 @receiver(pre_save, sender=Channel)
 def check_empty_members(sender, instance, **kwargs):
-   
-    if not instance.members.exists():
-        instance.delete()
+    # Überprüfen, ob die Anfrage eine PATCH- oder PUT-Anfrage ist
+    if isinstance(kwargs.get('request'), HttpRequest) and kwargs['request'].method in ['PATCH', 'PUT']:
+        # Wenn es sich um eine PATCH- oder PUT-Anfrage handelt und members leer sind, lösche die Instanz
+        if not instance.members.exists():
+            instance.delete()
 
 
 @receiver(pre_delete, sender=Channel)
