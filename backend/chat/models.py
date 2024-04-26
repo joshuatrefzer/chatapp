@@ -10,7 +10,7 @@ class Channel(models.Model):
     hash = models.UUIDField(default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)  
-    members = models.ManyToManyField(CustomUser, related_name='channels')
+    members = models.ManyToManyField(CustomUser, related_name='channels', blank=True)
     is_channel = models.BooleanField(default=True)
     picture = ResizedImageField(force_format="WEBP", size=[150, None], quality=75, upload_to="channel_pictures/", blank=True, null=True)
     read_by = models.ManyToManyField(CustomUser, related_name='read_channels', blank=True)
