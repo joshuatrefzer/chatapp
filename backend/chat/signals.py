@@ -13,12 +13,19 @@ def delete_previous_picture(sender, instance, **kwargs):
                     default_storage.delete(old_instance.picture.path)
         except sender.DoesNotExist:
             pass 
+        
+@receiver(pre_save, sender=Channel)
+def check_empty_members(sender, instance, **kwargs):
+   
+    if not instance.members.exists():
+        instance.delete()
+
 
 @receiver(pre_delete, sender=Channel)
 def delete_channel_picture(sender, instance, **kwargs):
     if instance.picture:
         default_storage.delete(instance.picture.path)
-        
+    
 
 @receiver(pre_delete, sender=Message)
 def delete_message_attachments(sender, instance, **kwargs):
